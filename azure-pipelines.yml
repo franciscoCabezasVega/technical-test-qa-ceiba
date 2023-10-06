@@ -1,52 +1,56 @@
 trigger:
 - main
 
-pr: 
-- none
+pr:
+  branches:
+    exclude:
+    - '*'
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 jobs:
-- job: Checkout
+- job: CheckoutCode
   displayName: 'Checkout code'
   steps:
   - checkout: self
 
-- job: RunTests
+- job: RunAutomatedTests
   displayName: 'Run automated tests'
-  dependsOn: Checkout
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: CheckoutCode
   steps:
-  - task: PowerShell@2
+  - task: UseDotNet@2
+    displayName: 'Install JDK'
     inputs:
-      targetType: 'inline'
-      script: |
-        # Set Java version
-        $env:JAVA_HOME = "$(Agent.ToolsDirectory)\jdk\11.0.x"  # Update with the correct Java version
-        $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+      version: '16'
 
-        # Display Java version
-        java -version
-
-        # Run Gradle task
-        ./gradlew clean test
+  - script: |
+      ./gradlew clean test
     displayName: 'Run tests with Gradle'
 
 - job: GenerateReports
   displayName: 'Generate reports'
-  dependsOn: RunTests
+  dependsOn: RunAutomatedTests
   steps:
-  - task: PowerShell@2
+  - task: UseDotNet@2
+    displayName: 'Install JDK'
     inputs:
-      targetType: 'inline'
-      script: |
-        # Set Java version
-        $env:JAVA_HOME = "$(Agent.ToolsDirectory)\jdk\11.0.x"  # Update with the correct Java version
-        $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+      version: '16'
 
-        # Display Java version
-        java -version
+  - script: |
+      ./gradlew aggregate
+    displayName: 'Generate reports with Gradle'
+    
+  - task: PublishTestResults@2
+    displayName: 'Publish test results'
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/build/test-results/test/*.xml'
 
-        # Run Gradle task for generating reports
-        ./gradlew aggregate
-    displayName: 'Generate reports with Serenity'
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish artifacts'
+    inputs:
+      pathtoPublish: '**/target/site/serenity'
+      artifactName: 'SerenityReports'

@@ -17,8 +17,6 @@ jobs:
 
 - job: RunAutomatedTests
   displayName: 'Run automated tests'
-  pool:
-    vmImage: 'ubuntu-latest'
   dependsOn: CheckoutCode
   steps:
   - task: UseDotNet@2

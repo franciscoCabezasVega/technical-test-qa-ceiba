@@ -17,24 +17,36 @@ jobs:
   displayName: 'Run automated tests'
   dependsOn: Checkout
   steps:
-  - task: UseJavaVersion@0
+  - task: PowerShell@2
     inputs:
-      version: '11'
-      addToPath: true
+      targetType: 'inline'
+      script: |
+        # Set Java version
+        $env:JAVA_HOME = "$(Agent.ToolsDirectory)\jdk\11.0.x"  # Update with the correct Java version
+        $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
 
-  - script: |
-      ./gradlew clean test
+        # Display Java version
+        java -version
+
+        # Run Gradle task
+        ./gradlew clean test
     displayName: 'Run tests with Gradle'
 
 - job: GenerateReports
   displayName: 'Generate reports'
   dependsOn: RunTests
   steps:
-  - task: UseJavaVersion@0
+  - task: PowerShell@2
     inputs:
-      version: '11'
-      addToPath: true
+      targetType: 'inline'
+      script: |
+        # Set Java version
+        $env:JAVA_HOME = "$(Agent.ToolsDirectory)\jdk\11.0.x"  # Update with the correct Java version
+        $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
 
-  - script: |
-      ./gradlew aggregate
+        # Display Java version
+        java -version
+
+        # Run Gradle task for generating reports
+        ./gradlew aggregate
     displayName: 'Generate reports with Serenity'

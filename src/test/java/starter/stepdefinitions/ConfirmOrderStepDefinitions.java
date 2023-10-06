@@ -29,8 +29,7 @@ public class ConfirmOrderStepDefinitions {
     public void i_log_in_with_valid_credentials(Actor actor) {
         actor.attemptsTo(
                 NavigateTo.theLoginPage(),
-                DoLogin.withCredential("standard_user", "secret_sauce"),
-                Ensure.that(PageElement.locatedBy(".title")).hasText("Products")
+                DoLogin.withCredential("standard_user", "secret_sauce")
         );
     }
 
@@ -60,6 +59,30 @@ public class ConfirmOrderStepDefinitions {
 
         actor.attemptsTo(
                 Ensure.that(PageElement.locatedBy(".title")).hasText("Checkout: Complete!")
+        );
+    }
+
+    @When("{actor} log in with problem user")
+    public void i_log_in_with_problem_user(Actor actor) {
+        actor.attemptsTo(
+                NavigateTo.theLoginPage(),
+                DoLogin.withCredential("problem_user", "secret_sauce")
+        );
+    }
+
+    @When("{actor} log in with locked out user")
+    public void i_log_in_with_locked_out_user(Actor actor) {
+        actor.attemptsTo(
+                NavigateTo.theLoginPage(),
+                DoLogin.withCredential("locked_out_user", "secret_sauce")
+        );
+    }
+
+    @When("{actor} log in with glitch user")
+    public void i_log_in_with_glitch_user(Actor actor) {
+        actor.attemptsTo(
+                NavigateTo.theLoginPage(),
+                DoLogin.withCredential("performance_glitch_user", "secret_sauce")
         );
     }
 }

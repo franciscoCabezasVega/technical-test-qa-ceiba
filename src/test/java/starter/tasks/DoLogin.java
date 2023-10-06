@@ -5,6 +5,8 @@ import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.ui.PageElement;
 import starter.ui.login.LoginForm;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
@@ -27,7 +29,8 @@ public class DoLogin implements Task {
         actor.attemptsTo(
                 Enter.theValue(username).into(LoginForm.USERNAME_FIELD),
                 Enter.theValue(password).into(LoginForm.PASSWORD_FIELD),
-                Click.on(LoginForm.LOGIN_BUTTON)
+                Click.on(LoginForm.LOGIN_BUTTON),
+                Ensure.that(PageElement.locatedBy(".title")).hasText("Products")
         );
     }
 }

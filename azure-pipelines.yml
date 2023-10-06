@@ -1,0 +1,38 @@
+trigger:
+- main
+
+pr: 
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+- job: Checkout
+  displayName: 'Checkout code'
+  steps:
+  - checkout: self
+
+- job: RunTests
+  displayName: 'Run automated tests'
+  dependsOn: Checkout
+  steps:
+  - task: UseJavaVersion@1
+    inputs:
+      versionSpec: '11'
+
+  - script: |
+      ./gradlew clean test
+    displayName: 'Run tests with Gradle'
+
+- job: GenerateReports
+  displayName: 'Generate reports'
+  dependsOn: RunTests
+  steps:
+  - task: UseJavaVersion@1
+    inputs:
+      versionSpec: '11'
+
+  - script: |
+      ./gradlew aggregate
+    displayName: 'Generate reports with Serenity'

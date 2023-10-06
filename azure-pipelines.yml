@@ -5,7 +5,7 @@ pr:
 - none
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'windows-latest'
 
 jobs:
 - job: Checkout
@@ -17,9 +17,10 @@ jobs:
   displayName: 'Run automated tests'
   dependsOn: Checkout
   steps:
-  - task: UseJavaVersion@1
+  - task: UseJavaVersion@0
     inputs:
-      versionSpec: '11'
+      version: '11'
+      addToPath: true
 
   - script: |
       ./gradlew clean test
@@ -29,9 +30,10 @@ jobs:
   displayName: 'Generate reports'
   dependsOn: RunTests
   steps:
-  - task: UseJavaVersion@1
+  - task: UseJavaVersion@0
     inputs:
-      versionSpec: '11'
+      version: '11'
+      addToPath: true
 
   - script: |
       ./gradlew aggregate

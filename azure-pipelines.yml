@@ -20,8 +20,7 @@ jobs:
   dependsOn: CheckoutCode
   container: adoptopenjdk:latest
   steps:
-  - script: |
-      ./gradlew clean test
+  - script: ./gradlew clean test
     displayName: 'Run tests with Gradle'
 
 - job: GenerateReports
@@ -29,8 +28,7 @@ jobs:
   dependsOn: RunAutomatedTests
   container: adoptopenjdk:latest
   steps:
-  - script: |
-      ./gradlew aggregate
+  - script: ./gradlew aggregate
     displayName: 'Generate reports with Gradle'
     
   - task: PublishTestResults@2

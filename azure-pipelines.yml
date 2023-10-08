@@ -18,12 +18,8 @@ jobs:
 - job: RunAutomatedTests
   displayName: 'Run automated tests'
   dependsOn: CheckoutCode
+  container: adoptopenjdk:latest
   steps:
-  - task: UseDotNet@2
-    displayName: 'Install JDK'
-    inputs:
-      version: '20.0.2'
-
   - script: |
       ./gradlew clean test
     displayName: 'Run tests with Gradle'
@@ -31,12 +27,8 @@ jobs:
 - job: GenerateReports
   displayName: 'Generate reports'
   dependsOn: RunAutomatedTests
+  container: adoptopenjdk:latest
   steps:
-  - task: UseDotNet@2
-    displayName: 'Install JDK'
-    inputs:
-      version: '20.0.2'
-
   - script: |
       ./gradlew aggregate
     displayName: 'Generate reports with Gradle'

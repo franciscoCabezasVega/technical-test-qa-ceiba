@@ -22,7 +22,7 @@ jobs:
   - task: UseDotNet@2
     displayName: 'Install JDK'
     inputs:
-      version: '8'
+      version: '8.0'
 
   - script: |
       ./gradlew clean test
@@ -35,7 +35,7 @@ jobs:
   - task: UseDotNet@2
     displayName: 'Install JDK'
     inputs:
-      version: '8'
+      version: '8.0'
 
   - script: |
       ./gradlew aggregate

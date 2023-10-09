@@ -16,7 +16,7 @@ jobs:
   - task: Gradle@3
     inputs:
       gradleWrapperFile: 'gradlew'
-      tasks: 'build'
+      tasks: 'clean test aggregate'
       publishJUnitResults: true
       testResultsFiles: '**/target/site/serenity/*.xml'
       javaHomeOption: 'JDKVersion'

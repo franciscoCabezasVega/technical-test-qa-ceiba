@@ -19,14 +19,15 @@ jobs:
   displayName: 'Run automated tests'
   dependsOn: CheckoutCode
   steps:
-  - task: JavaToolInstaller@0
-    inputs:
-      versionSpec: "11"
-      jdkArchitectureOption: x64
-      jdkSourceOption: LocalDirectory
-      jdkFile: "/builds/openjdk-11.0.2_linux-x64_bin.tar.gz"
-      jdkDestinationDirectory: "/builds/binaries/externals"
-      cleanDestinationDirectory: true
+- task: Gradle@3
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    tasks: 'build'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    sonarQubeRunAnalysis: false
+    spotBugsAnalysis: false
 
   - script: |
       ./gradlew clean test
@@ -35,16 +36,6 @@ jobs:
 - job: GenerateReports
   displayName: 'Generate reports'
   dependsOn: RunAutomatedTests
-  steps:
-  - task: JavaToolInstaller@0
-    inputs:
-      versionSpec: "11"
-      jdkArchitectureOption: x64
-      jdkSourceOption: LocalDirectory
-      jdkFile: "/builds/openjdk-11.0.2_linux-x64_bin.tar.gz"
-      jdkDestinationDirectory: "/builds/binaries/externals"
-      cleanDestinationDirectory: true
-
   - script: |
       ./gradlew aggregate
     displayName: 'Generate reports with Gradle'

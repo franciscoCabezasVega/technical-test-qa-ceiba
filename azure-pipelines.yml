@@ -18,7 +18,7 @@ jobs:
       gradleWrapperFile: 'gradlew'
       tasks: 'clean test aggregate'
       publishJUnitResults: true
-      testResultsFiles: '**/target/site/serenity/index.html'
+      testResultsFiles: '**/target/site/serenity/*.xml'
       javaHomeOption: 'JDKVersion'
       sonarQubeRunAnalysis: false
       spotBugsAnalysis: false
@@ -31,7 +31,7 @@ jobs:
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: '**/TEST-index.html'
+      testResultsFiles: '**/TEST-*.xml'
       failTaskOnFailedTests: true
 
   - task: PublishBuildArtifacts@1

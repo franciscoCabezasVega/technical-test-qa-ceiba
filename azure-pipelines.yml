@@ -19,10 +19,14 @@ jobs:
   displayName: 'Run automated tests'
   dependsOn: CheckoutCode
   steps:
-  - task: UseDotNet@2
-    displayName: 'Install JDK'
+  - task: JavaToolInstaller@0
     inputs:
-      version: '1.17'
+      versionSpec: "11"
+      jdkArchitectureOption: x64
+      jdkSourceOption: LocalDirectory
+      jdkFile: "/builds/openjdk-11.0.2_linux-x64_bin.tar.gz"
+      jdkDestinationDirectory: "/builds/binaries/externals"
+      cleanDestinationDirectory: true
 
   - script: |
       ./gradlew clean test
@@ -32,10 +36,14 @@ jobs:
   displayName: 'Generate reports'
   dependsOn: RunAutomatedTests
   steps:
-  - task: UseDotNet@2
-    displayName: 'Install JDK'
+  - task: JavaToolInstaller@0
     inputs:
-      version: '1.17'
+      versionSpec: "11"
+      jdkArchitectureOption: x64
+      jdkSourceOption: LocalDirectory
+      jdkFile: "/builds/openjdk-11.0.2_linux-x64_bin.tar.gz"
+      jdkDestinationDirectory: "/builds/binaries/externals"
+      cleanDestinationDirectory: true
 
   - script: |
       ./gradlew aggregate

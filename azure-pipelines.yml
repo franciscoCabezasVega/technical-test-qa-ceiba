@@ -13,18 +13,16 @@ jobs:
 - job: RunTests
   displayName: 'Run functional tests'
   steps:
-  - task: Gradle@2
+  - task: Gradle@3
     inputs:
-      workingDirectory: ''
       gradleWrapperFile: 'gradlew'
-      gradleOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.8'
-      jdkArchitectureOption: 'x64'
       tasks: 'clean test aggregate'
       publishJUnitResults: true
       testResultsFiles: '**/target/site/serenity/*.xml'
-
+      javaHomeOption: 'JDKVersion'
+      sonarQubeRunAnalysis: false
+      spotBugsAnalysis: false
+    
 - job: GenerateReports
   displayName: 'Generate reports'
   dependsOn: RunTests

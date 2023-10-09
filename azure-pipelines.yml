@@ -1,52 +1,37 @@
 trigger:
 - main
 
-pr:
-  branches:
-    exclude:
-    - '*'
-
 pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-- job: CheckoutCode
+- job: Checkout
   displayName: 'Checkout code'
   steps:
   - checkout: self
 
-- job: RunAutomatedTests
-  displayName: 'Run automated tests'
-  dependsOn: CheckoutCode
+- job: RunTests
+  displayName: 'Run functional tests'
   steps:
   - task: Gradle@2
     inputs:
       workingDirectory: ''
       gradleWrapperFile: 'gradlew'
-      tasks: 'clean test'
+      tasks: 'clean test aggregate'
       publishJUnitResults: true
       testResultsFiles: '**/target/site/serenity/*.xml'
 
 - job: GenerateReports
   displayName: 'Generate reports'
-  dependsOn: RunAutomatedTests
+  dependsOn: RunTests
   steps:
-  - task: Gradle@2
-    inputs:
-      workingDirectory: ''
-      gradleWrapperFile: 'gradlew'
-      tasks: 'aggregate'
-      publishJUnitResults: true
-      testResultsFiles: '**/target/site/serenity/*.xml'
-    
   - task: PublishTestResults@2
-    displayName: 'Publish test results'
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: '**/build/test-results/test/*.xml'
+      testResultsFiles: '**/TEST-*.xml'
+      failTaskOnFailedTests: true
 
   - task: PublishBuildArtifacts@1
-    displayName: 'Publish artifacts'
     inputs:
-      pathtoPublish: '**/target/site/serenity'
-      artifactName: 'SerenityReports'
+      artifactName: 'test-results'
+      pathToPublish: '**/target/site/serenity'

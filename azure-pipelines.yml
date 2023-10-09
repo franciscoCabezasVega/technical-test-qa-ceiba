@@ -16,13 +16,13 @@ jobs:
   - task: Gradle@3
     inputs:
       gradleWrapperFile: 'gradlew'
-      tasks: 'clean test aggregate'
+      tasks: 'build'
       publishJUnitResults: true
       testResultsFiles: '**/target/site/serenity/*.xml'
       javaHomeOption: 'JDKVersion'
       sonarQubeRunAnalysis: false
       spotBugsAnalysis: false
-    
+
 - job: GenerateReports
   displayName: 'Generate reports'
   dependsOn: RunTests

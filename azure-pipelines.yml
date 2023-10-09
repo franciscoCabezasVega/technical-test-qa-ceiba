@@ -19,16 +19,15 @@ jobs:
   displayName: 'Run automated tests'
   dependsOn: CheckoutCode
   steps:
-- task: Gradle@3
-  inputs:
-    gradleWrapperFile: 'gradlew'
-    tasks: 'build'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    sonarQubeRunAnalysis: false
-    spotBugsAnalysis: false
-
+  - task: Gradle@3
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: 'build'
+      publishJUnitResults: true
+      testResultsFiles: '**/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      sonarQubeRunAnalysis: false
+      spotBugsAnalysis: false
   - script: |
       ./gradlew clean test
     displayName: 'Run tests with Gradle'
@@ -36,6 +35,7 @@ jobs:
 - job: GenerateReports
   displayName: 'Generate reports'
   dependsOn: RunAutomatedTests
+  steps:
   - script: |
       ./gradlew aggregate
     displayName: 'Generate reports with Gradle'

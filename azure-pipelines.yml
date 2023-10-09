@@ -19,26 +19,25 @@ jobs:
   displayName: 'Run automated tests'
   dependsOn: CheckoutCode
   steps:
-  - task: Gradle@3
+  - task: Gradle@2
     inputs:
+      workingDirectory: ''
       gradleWrapperFile: 'gradlew'
-      tasks: 'build'
+      tasks: 'clean test'
       publishJUnitResults: true
-      testResultsFiles: '**/TEST-*.xml'
-      javaHomeOption: 'JDKVersion'
-      sonarQubeRunAnalysis: false
-      spotBugsAnalysis: false
-  - script: |
-      ./gradlew clean test
-    displayName: 'Run tests with Gradle'
+      testResultsFiles: '**/target/site/serenity/*.xml'
 
 - job: GenerateReports
   displayName: 'Generate reports'
   dependsOn: RunAutomatedTests
   steps:
-  - script: |
-      ./gradlew aggregate
-    displayName: 'Generate reports with Gradle'
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      tasks: 'aggregate'
+      publishJUnitResults: true
+      testResultsFiles: '**/target/site/serenity/*.xml'
     
   - task: PublishTestResults@2
     displayName: 'Publish test results'

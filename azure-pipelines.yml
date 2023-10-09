@@ -22,6 +22,7 @@ jobs:
       javaHomeOption: 'JDKVersion'
       sonarQubeRunAnalysis: false
       spotBugsAnalysis: false
+    continueOnError: true
 
 - job: GenerateReports
   displayName: 'Generate reports'

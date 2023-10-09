@@ -17,6 +17,10 @@ jobs:
     inputs:
       workingDirectory: ''
       gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
       tasks: 'clean test aggregate'
       publishJUnitResults: true
       testResultsFiles: '**/target/site/serenity/*.xml'
